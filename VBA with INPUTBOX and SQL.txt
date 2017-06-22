@@ -1,0 +1,19 @@
+Dim stsql As String
+
+MyDate1 = InputBox("Input Start Date   (dd/mm/yyyy)", "Date", Format(Now() - 360, "dd/mm/yyyy"))   'Consider the forcing of Date format input. 
+
+MyDate2 = InputBox("Input End Date   (dd/mm/yyyy)", "Date", Format(Now(), "dd/mm/yyyy"))
+
+stsql = "SELECT DISTINCT AA.[Full_Name], #" & Format(MyDate1, "mm/dd/yyyy") & "# AS StartDate, #" & Format(MyDate2, "mm/dd/yyyy") & "# AS EndDate, Count(AA.[Activity]) AS CountofActivity " & _
+    "FROM (SELECT DISTINCT Contacts.[Full_Name], Action_Record.[Activity], Action_Record.[Date of Activity] " & _
+              "FROM Contacts LEFT JOIN Action_Record ON Contacts.[ID] = Action_Record.[Contact_ID]) AS AA " & _
+              "WHERE AA.[Date of Activity] Between #" & Format(MyDate1, "mm/dd/yyyy") & "# And #" & Format(MyDate2, "mm/dd/yyyy") & "# " & _		'The # here dictates the date format in the SQL statement
+    "GROUP BY AA.[Full_Name];"
+
+Call ExcelExport(stsql)
+
+
+
+
+
+
